@@ -6,6 +6,17 @@ const { createIncidentSchema, updateIncidentStatusSchema } = require('../validat
 
 const router = express.Router();
 
+// Debug: ensure controller exports present (helps on case-sensitive filesystems)
+try {
+  const keys = Object.keys(incidentController || {});
+  console.log('incident.controller exports:', keys);
+  if (!incidentController || typeof incidentController.createIncident !== 'function') {
+    console.error('Missing handler: incidentController.createIncident is not a function');
+  }
+} catch (e) {
+  console.error('Error inspecting incidentController exports', e);
+}
+
 // User routes (authenticated users)
 // Create incident report
 router.post('/', auth, incidentController.createIncident);
