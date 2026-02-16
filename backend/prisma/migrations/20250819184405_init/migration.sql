@@ -149,3 +149,33 @@ ALTER TABLE "Booking" ADD CONSTRAINT "Booking_routeId_fkey" FOREIGN KEY ("routeI
 
 -- AddForeignKey
 ALTER TABLE "Booking" ADD CONSTRAINT "Booking_passengerId_fkey" FOREIGN KEY ("passengerId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+-- Insert Mock Admin
+INSERT INTO "User"
+("id","username","email","password","role","createdAt","updatedAt")
+VALUES
+('admin-id-001','admin','admin@test.com','123456789a','ADMIN',NOW(),NOW());
+
+-- Insert Mock Driver
+INSERT INTO "User"
+("id","username","email","password","role","isVerified","createdAt","updatedAt")
+VALUES
+('driver-id-001','driver','driver@test.com','123456789a','DRIVER',true,NOW(),NOW());
+
+INSERT INTO "DriverVerification"
+("id","userId","licenseNumber","firstNameOnLicense","lastNameOnLicense",
+ "licenseIssueDate","licenseExpiryDate","licensePhotoUrl","selfiePhotoUrl",
+ "typeOnLicense","createdAt","updatedAt")
+VALUES
+('dv-001','driver-id-001','DL999999','John','Deng',
+ NOW(),NOW() + interval '5 years',
+ 'license.jpg','selfie.jpg',
+ 'PRIVATE_CAR',NOW(),NOW())
+ON CONFLICT ("licenseNumber") DO NOTHING;
+
+-- Insert Mock Passenger
+INSERT INTO "User"
+("id","username","email","password","role","createdAt","updatedAt")
+VALUES
+('passenger-id-001','passenger','passenger@test.com','123456789a','PASSENGER',NOW(),NOW());
