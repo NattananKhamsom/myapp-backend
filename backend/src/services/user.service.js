@@ -227,6 +227,33 @@ const deleteUser = async (id) => {
 //     return safeUser;
 // };
 
+
+
+// add new function for account deletion request and scheduled deletion
+const requestAccountDeletion = async (id) => {
+    const user = await prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+        throw new ApiError(404, 'User not found');
+    }
+
+    const updatedUser = await prisma.user.update({
+        where: { id },
+        data: {
+            isDeleted: true,
+            isActive: false,
+            deletedAt: new Date(),
+        },
+    });
+
+    const { password, ...safeUser } = updatedUser;
+    return safeUser;
+};
+
+
+
+
+
 module.exports = {
     searchUsers,
     getAllUsers,
@@ -239,4 +266,8 @@ module.exports = {
     deleteUser,
     updateUserProfile,
     getUserPublicById,
+    requestAccountDeletion,
+    //permanentlyDeleteExpiredUsers,
+    //forceDeleteUser,
+
 };

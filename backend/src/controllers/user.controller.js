@@ -196,6 +196,22 @@ const setUserStatus = asyncHandler(async (req, res) => {
     res.status(200).json({ success: true, message: "User status updated", data: updatedUser });
 });
 
+
+// add new controller for account deletion request and scheduled deletion
+const requestDeleteMyAccount = asyncHandler(async (req, res) => {
+    const userId = req.user.sub;
+
+    const updatedUser = await userService.deleteUser(userId);
+
+
+    res.status(200).json({
+    success: true,
+    message: "Account permanently deleted.",
+});
+
+});
+
+
 module.exports = {
     adminListUsers,
     getAllUsers,
@@ -207,5 +223,6 @@ module.exports = {
     adminUpdateUser,
     adminDeleteUser,
     setUserStatus,
+    requestDeleteMyAccount,
 
 };
