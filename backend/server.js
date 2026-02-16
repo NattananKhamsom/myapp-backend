@@ -1,4 +1,6 @@
 require("dotenv").config();
+require('./jobs/userDeletion.job');
+
 
 const express = require('express');
 const cors = require('cors');
