@@ -37,13 +37,13 @@ model User {
   notification             Notification[]
   createdRoutes            Route[]             @relation("DriverRoutes")
   vehicles                 Vehicle[]
-  
+
   isDeleted                Boolean             @default(false)
   deletedAt                DateTime?
 
   isBlacklisted Boolean  @default(false)
   blacklistReason   String?
-
+  
   @@index([role])
   @@index([isActive])
   @@index([isVerified])
@@ -258,4 +258,3 @@ enum IncidentStatus {
   RESOLVED
   CLOSED
 }
-
