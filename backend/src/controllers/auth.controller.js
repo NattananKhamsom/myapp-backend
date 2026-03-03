@@ -13,8 +13,6 @@ const login = asyncHandler(async (req, res) => {
         user = await userService.getUserByUsername(username);
     }
 
-    
-
     // 2. เพิ่มการเช็ค Blacklist (เพิ่มใหม่ตรงนี้)
     if (user && user.isBlacklisted) {
         throw new ApiError(403, `บัญชีของคุณถูกระงับการใช้งานเนื่องจาก: ${user.blacklistReason || 'ละเมิดกฎของระบบ'}`);
