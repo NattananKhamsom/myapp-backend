@@ -47,6 +47,11 @@ const updateUserStatusSchema = z.object({
         // required_error: "isActive field is required",
         invalid_type_error: "isActive must be a boolean",
     }).optional(),
+    // allow admin to mark/unmark blacklist and save a reason
+    isBlacklisted: z.boolean({
+        invalid_type_error: "isBlacklisted must be a boolean",
+    }).optional(),
+    blacklistReason: z.string().nullable().optional(),
 });
 
 const listUsersQuerySchema = z.object({
@@ -57,11 +62,12 @@ const listUsersQuerySchema = z.object({
     role: z.nativeEnum(Role).optional(),
     isActive: z.coerce.boolean().optional(),
     isVerified: z.coerce.boolean().optional(),
+    isBlacklisted: z.coerce.boolean().optional(),
 
     createdFrom: z.string().refine(v => !isNaN(Date.parse(v)), { message: "Invalid createdFrom" }).optional(),
     createdTo: z.string().refine(v => !isNaN(Date.parse(v)), { message: "Invalid createdTo" }).optional(),
 
-    sortBy: z.enum(['createdAt', 'lastLogin', 'email', 'username', 'firstName', 'lastName']).default('createdAt'),
+    sortBy: z.enum(['createdAt', 'updatedAt', 'lastLogin', 'email', 'username', 'firstName', 'lastName']).default('createdAt'),
     sortOrder: z.enum(['asc', 'desc']).default('desc'),
 });
 

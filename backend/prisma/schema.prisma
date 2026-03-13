@@ -37,10 +37,17 @@ model User {
   notification             Notification[]
   createdRoutes            Route[]             @relation("DriverRoutes")
   vehicles                 Vehicle[]
+  
+  
+  
+  blacklistTickets         BlacklistedTicket[]
 
   isDeleted                Boolean             @default(false)
   deletedAt                DateTime?
 
+  isBlacklisted Boolean  @default(false)
+  blacklistReason   String?
+  
   @@index([role])
   @@index([isActive])
   @@index([isVerified])
@@ -254,4 +261,24 @@ enum IncidentStatus {
   REVIEWED
   RESOLVED
   CLOSED
+}
+
+enum CardType {
+  YELLOW
+  RED
+}
+
+model BlacklistedTicket {
+  id        String   @id @default(cuid())
+  userId    String
+  cardType  CardType
+  category  String
+  reason    String
+  issuedBy  String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([cardType])
 }

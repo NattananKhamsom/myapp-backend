@@ -147,16 +147,26 @@ const adminDeleteUser = asyncHandler(async (req, res) => {
 });
 
 const setUserStatus = asyncHandler(async (req, res) => {
-    const { isActive, isVerified } = req.body
+    // 1. เพิ่มการรับค่า isBlacklisted และ blacklistReason จาก req.body
+    const { isActive, isVerified, isBlacklisted, blacklistReason } = req.body
 
-    if (typeof isActive !== 'boolean' && typeof isVerified !== 'boolean') {
-        throw new ApiError(400, 'Provide at least one of isActive or isVerified as boolean');
+    // 2. ปรับเงื่อนไขการเช็ค Input
+    if (
+        typeof isActive !== 'boolean' && 
+        typeof isVerified !== 'boolean' && 
+        typeof isBlacklisted !== 'boolean'
+    ) {
+        throw new ApiError(400, 'Provide at least one of isActive, isVerified or isBlacklisted as boolean');
     }
 
+        // 3. รวมฟิลด์ที่ต้องการอัปเดตส่งไปยัง Service
     let updatedUser = await userService.updateUserProfile(req.params.id, {
         ...(typeof isActive === 'boolean' ? { isActive } : {}),
         ...(typeof isVerified === 'boolean' ? { isVerified } : {}),
+        ...(typeof isBlacklisted === 'boolean' ? { isBlacklisted } : {}),
+        ...(blacklistReason !== undefined ? { blacklistReason } : {}), // เก็บเหตุผล
     });
+
 
     if (typeof isVerified === 'boolean') {
         try {
